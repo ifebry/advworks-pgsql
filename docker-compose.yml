@@ -1,0 +1,57 @@
+version: '3'
+services:
+  dbadventure:
+    build: ./
+    container_name: dbadventure
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 55432:5432
+    volumes:
+      - postgresql_bin_adv:/usr/lib/postgresql
+      - postgresql_data_adv:/var/lib/postgresql/data
+      - ./files:/files
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+    networks:
+      - dbadventure
+  pgadmin:
+    container_name: pgadventure
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: postgres
+      PGADMIN_LISTEN_PORT: 5050
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - postgresql_bin_adv:/usr/lib/postgresql
+      - pgadmin_root_prefs_adv:/root/.pgadmin
+      - pgadmin_working_dir_adv:/var/lib/pgadmin
+      - ./files:/files
+    ports:
+      - 5050:5050
+    networks:
+      - dbadventure
+    depends_on:
+      - dbadventure
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 0.5G
+networks:
+  dbadventure:
+    driver: bridge
+volumes:
+  pgadmin_root_prefs_adv:
+    driver: local
+  pgadmin_working_dir_adv:
+    driver: local
+  postgresql_bin_adv:
+    driver: local
+  postgresql_data_adv:
+    driver: local
