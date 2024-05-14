@@ -2,9 +2,11 @@
 
 export PGUSER=postgres
 psql <<- SHELL
-  CREATE USER docker;
-  CREATE DATABASE "Adventureworks";
-  GRANT ALL PRIVILEGES ON DATABASE "Adventureworks" TO docker;
+  CREATE DATABASE "adventureworks";
+  CREATE DATABASE "northwind";
+  GRANT ALL PRIVILEGES ON DATABASE "adventureworks" TO postgres;
+  GRANT ALL PRIVILEGES ON DATABASE "northwind" TO postgres;
 SHELL
 cd /data
-psql -d Adventureworks < /data/install.sql
+psql -d adventureworks -U postgres < /data/install.sql
+psql -d northwind -U postgres < /data/northwind.sql

@@ -5,6 +5,7 @@ RUN apt-get -y install unzip ruby dos2unix
 
 RUN mkdir /data
 COPY install.sql /data/
+COPY northwind.sql /data/
 COPY update_csvs.rb /data/
 COPY adventure_works_2014_OLTP_script.zip /data/
 RUN cd /data && \
